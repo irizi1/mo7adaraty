@@ -1,0 +1,196 @@
+<footer class="main-footer">
+    <div class="footer-container">
+        <div class="footer-section about" data-aos="fade-up">
+            <h3 class="footer-logo">Mo7adaraty</h3>
+            <p>منصتك التعليمية الأولى لتبادل المحاضرات والامتحانات والتواصل الفعال بين الطلاب لبيئة دراسية أفضل.</p>
+            <p class="contact-info">تواصلوا معنا: <a href="mailto:support@mo7adaraty.com">support@mo7adaraty.com</a></p>
+        </div>
+        <div class="footer-section links" data-aos="fade-up" data-aos-delay="100">
+            <h4>روابط سريعة</h4>
+            <ul>
+                <li><a href="/mo7adaraty/index.php">الرئيسية</a></li>
+                <li><a href="/mo7adaraty/student/profil.php">ملفي الشخصي</a></li>
+                <li><a href="/mo7adaraty/student/community/index.php">ساحة المشاركات</a></li>
+                <li><a href="/mo7adaraty/student/contact/index.php">تواصل معنا</a></li>
+            </ul>
+        </div>
+        <div class="footer-section social" data-aos="fade-up" data-aos-delay="200">
+            <h4>تابعنا</h4>
+            <div class="social-icons">
+                <a href="https://facebook.com/mo7adaraty" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://twitter.com/mo7adaraty" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="https://linkedin.com/company/mo7adaraty" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://instagram.com/mo7adaraty" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://github.com/mo7adaraty" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>تم الإنشاء بواسطة <strong>MOHAMED IRIZI</strong> | جميع الحقوق محفوظة &copy; <?php echo date("Y"); ?></p>
+    </div>
+</footer>
+
+<style>
+    :root {
+        --primary-color: #1a73e8;
+        --secondary-color: #5f6368;
+        --bg-dark: #202124;
+        --text-light: #f1f3f4;
+        --bg-light: #f5f7fa;
+        --shadow-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .main-footer {
+        background: linear-gradient(135deg, var(--bg-dark), #2c3e50);
+        color: var(--text-light);
+        padding: 60px 20px 20px;
+        font-family: 'Tajawal', sans-serif;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px;
+        text-align: right;
+        padding: 0 20px;
+    }
+
+    .footer-section h3, .footer-section h4 {
+        margin-bottom: 20px;
+        color: var(--text-light);
+        font-weight: 700;
+        font-size: 1.5rem;
+        position: relative;
+    }
+    .footer-section h3::after, .footer-section h4::after {
+        content: '';
+        width: 50px;
+        height: 3px;
+        background-color: var(--primary-color);
+        position: absolute;
+        bottom: -8px;
+        right: 0;
+        border-radius: 2px;
+    }
+
+    .footer-logo {
+        font-size: 2rem;
+        font-weight: 800;
+    }
+
+    .footer-section p {
+        line-height: 1.8;
+        color: #bdc3c7;
+        font-size: 1rem;
+    }
+
+    .contact-info a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .contact-info a:hover {
+        text-decoration: underline;
+    }
+
+    .footer-section.links ul {
+        list-style: none;
+        padding: 0;
+    }
+    .footer-section.links ul li a {
+        color: #bdc3c7;
+        text-decoration: none;
+        margin-bottom: 12px;
+        display: block;
+        font-size: 1rem;
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .footer-section.links ul li a:hover {
+        color: var(--text-light);
+        transform: translateX(-5px);
+    }
+
+    .social-icons {
+        display: flex;
+        gap: 15px;
+    }
+    .social-icons a {
+        color: var(--text-light);
+        font-size: 1.5rem;
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .social-icons a:hover {
+        color: var(--primary-color);
+        transform: scale(1.2);
+    }
+
+    .footer-bottom {
+        text-align: center;
+        padding: 20px;
+        margin-top: 40px;
+        background-color: rgba(0, 0, 0, 0.2);
+        font-size: 0.9rem;
+    }
+    .footer-bottom p {
+        margin: 0;
+        color: #bdc3c7;
+    }
+    .footer-bottom strong {
+        color: var(--text-light);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .footer-container {
+            grid-template-columns: 1fr;
+            text-align: center;
+            gap: 30px;
+        }
+        .footer-section h3::after, .footer-section h4::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .social-icons {
+            justify-content: center;
+        }
+        .footer-section.links ul li a:hover {
+            transform: none;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .main-footer {
+            padding: 40px 15px 15px;
+        }
+        .footer-container {
+            padding: 0 15px;
+        }
+        .footer-logo {
+            font-size: 1.8rem;
+        }
+        .footer-section h3, .footer-section h4 {
+            font-size: 1.3rem;
+        }
+        .social-icons a {
+            font-size: 1.3rem;
+        }
+        .footer-bottom {
+            font-size: 0.85rem;
+        }
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+    });
+</script>

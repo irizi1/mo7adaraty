@@ -1,0 +1,219 @@
+/* =================================
+   استيراد خط عربي (Tajawal)
+   ================================= */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+
+/* =================================
+   تنسيقات أساسية وعامة
+   ================================= */
+body {
+    font-family: 'Tajawal', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+}
+
+/* كلاس مخصص لتوسيط المحتوى (لصفحات الدخول والتسجيل) */
+body.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* =================================
+   الهيدر وقائمة التنقل العلوية
+   ================================= */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    padding: 10px 40px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+.logo a {
+    font-size: 24px;
+    font-weight: 700;
+    color: #007bff;
+    text-decoration: none;
+}
+.main-nav ul { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; }
+.main-nav li a {
+    padding: 15px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    display: block;
+    position: relative;
+}
+.main-nav li a::after {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    width: 0;
+    height: 2px;
+    background-color: #007bff;
+    transition: width 0.3s;
+}
+.main-nav li a:hover::after {
+    width: calc(100% - 30px);
+}
+
+/* قائمة الإشعارات المنسدلة */
+.notifications-menu { position: relative; }
+.notification-count { background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; position: absolute; top: 10px; right: 5px; border: 1px solid white;}
+.notifications-dropdown { display: none; position: absolute; top: 100%; left: 0; background: white; border: 1px solid #ddd; box-shadow: 0 4px 10px rgba(0,0,0,0.1); min-width: 320px; z-index: 1000; border-radius: 0 0 8px 8px;}
+.notifications-menu:hover .notifications-dropdown { display: block; }
+.notification-item, .view-all { display: block; padding: 12px 15px; border-bottom: 1px solid #eee; text-decoration: none; color: #333; }
+.notification-item:last-of-type { border-bottom: none; }
+.notification-item:hover { background: #f8f9fa; }
+.view-all { text-align: center; font-weight: bold; background-color: #f8f9fa; }
+.notifications-dropdown p { padding: 15px; text-align: center; color: #888; margin: 0;}
+
+
+/* =================================
+   نماذج التسجيل والدخول
+   ================================= */
+.form-container {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 550px;
+    border-top: 5px solid #007bff;
+}
+.form-container h2 { text-align: center; color: #333; margin-top: 0; margin-bottom: 10px; font-size: 26px; font-weight: 700; }
+.form-container p { text-align: center; color: #6c757d; margin-bottom: 30px; font-size: 16px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #495057; }
+input[type="text"], input[type="email"], input[type="password"], select, textarea { width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 8px; box-sizing: border-box; font-size: 16px; font-family: 'Tajawal', sans-serif; transition: border-color 0.3s, box-shadow 0.3s; }
+.checkbox-container { border: 1px solid #ced4da; padding: 15px; border-radius: 8px; max-height: 150px; overflow-y: auto; background-color: #f8f9fa; }
+.checkbox-container div { margin-bottom: 10px; }
+button[type="submit"] { width: 100%; padding: 14px; border: none; border-radius: 8px; background-color: #007bff; color: #ffffff; font-size: 18px; font-weight: 700; cursor: pointer; transition: background-color 0.3s, transform 0.2s; }
+button[type="submit"]:hover { background-color: #0056b3; transform: translateY(-2px); }
+.switch-form { text-align: center; margin-top: 20px; }
+.switch-form a { color: #007bff; text-decoration: none; font-weight: 600; }
+.switch-form a:hover { text-decoration: underline; }
+.status-message { text-align: center; padding: 10px; margin-bottom: 20px; border-radius: 8px; font-weight: bold; }
+.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+/* =================================
+   تنسيقات الصفحات الداخلية (بروفايل، تفاصيل فصل..)
+   ================================= */
+.page-container { max-width: 900px; margin: 40px auto; padding: 20px; }
+.profile-container { padding: 30px; background-color: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.profile-header { display: flex; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+.profile-picture-container { width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin-left: 20px; border: 4px solid #007bff; flex-shrink: 0; }
+.profile-picture-container img { width: 100%; height: 100%; object-fit: cover; }
+.profile-info h1 { margin: 0; color: #333; }
+.profile-info p { margin: 5px 0 0; color: #6c757d; }
+.enrolled-classes h2, .page-container h1 { border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 20px; font-size: 24px; }
+.class-card, .announcement-card { background-color: #fff; border-radius: 8px; padding: 25px; margin-bottom: 20px; border: 1px solid #e9ecef; transition: box-shadow 0.3s, transform 0.3s; }
+.class-card:hover, .announcement-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+.class-card h3, .announcement-card h2 { margin-top: 0; }
+a.btn-primary { display: inline-block; margin-top: 15px; background-color: #007bff; color: white !important; padding: 10px 18px; border-radius: 5px; text-decoration: none; font-weight: 500; transition: background-color 0.2s; }
+a.btn-primary:hover { background-color: #0056b3; }
+
+/* =================================
+   تنسيق نافذة الإبلاغ (Modal)
+   ================================= */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1001; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px 30px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    position: relative;
+}
+.close-btn {
+    color: #aaa;
+    float: left;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close-btn:hover, .close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* =================================
+   تنسيق قسم التعليقات
+   ================================= */
+.comments-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #f1f1f1;
+}
+.comment {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f9f9f9;
+}
+.comment:last-child {
+    border-bottom: none;
+}
+.comment-author-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+.comment-author {
+    font-weight: bold;
+    color: #007bff;
+}
+.comment-text {
+    margin: 5px 0;
+}
+.no-comments {
+    text-align: center;
+    color: #888;
+    padding: 15px;
+}
+.comment-form {
+    display: flex;
+    margin-top: 15px;
+}
+.comment-form textarea {
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    resize: vertical;
+    font-family: 'Tajawal', sans-serif;
+}
+.comment-form button {
+    border: none;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-family: 'Tajawal', sans-serif;
+}
