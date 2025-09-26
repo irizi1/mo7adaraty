@@ -1,25 +1,4 @@
-<?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
 
-$unread_notifications_count = 0;
-$notifications = [];
-
-if (isset($_SESSION['user_id'])) {
-    require_once __DIR__ . '/../config/db_connexion.php';
-    
-    $stmt_count = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE user_id = ? AND is_read = 0");
-    $stmt_count->execute([$_SESSION['user_id']]);
-    $unread_notifications_count = $stmt_count->fetchColumn();
-
-    $stmt = $pdo->prepare(
-        "SELECT message, link, is_read, created_at FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 5"
-    );
-    $stmt->execute([$_SESSION['user_id']]);
-    $notifications = $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-?>
 <style>
     /* أنماط الهيدر الأساسية */
     .main-header {
