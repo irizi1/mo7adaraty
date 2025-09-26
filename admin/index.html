@@ -1,1 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - Mo7adaraty</title>
+    <link rel="stylesheet" href="../assets/css/admin_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            </aside>
+        <main class="admin-main-content">
+            <h2><i class="fa-solid fa-chart-line"></i> لوحة التحكم الرئيسية</h2>
+            <p>أهلاً بك في لوحة التحكم. سيتم عرض الإحصائيات هنا.</p>
+            
+            <div id="user-info"></div>
+        </main>
+    </div>
 
+    <script type="module">
+        import supabase from '../assets/js/supabase.js';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // التحقق من وجود مستخدم مسجل دخوله
+            const { data: { session }, error } = await supabase.auth.getSession();
+
+            if (!session) {
+                // إذا لم يكن هناك مستخدم، قم بتوجيهه لصفحة الدخول
+                window.location.href = '../login.html';
+                return;
+            }
+
+            // عرض معلومات المستخدم للتأكد
+            const userInfoDiv = document.getElementById('user-info');
+            userInfoDiv.innerHTML = `
+                <h3>معلومات المستخدم الحالي:</h3>
+                <p><strong>البريد الإلكتروني:</strong> ${session.user.email}</p>
+                <p><strong>معرف المستخدم:</strong> ${session.user.id}</p>
+            `;
+        });
+    </script>
+</body>
+</html>
