@@ -6,7 +6,6 @@ $(document).ready(function() {
     const $statusMessage = $('#status-message');
     const $submitButton = $loginForm.find('button[type="submit"]');
 
-    // وظيفة إظهار الرسائل
     function showMessage(message, isError = false) {
         $statusMessage
             .text(message)
@@ -15,31 +14,50 @@ $(document).ready(function() {
             .show();
     }
 
-    // التعامل مع إرسال النموذج
     $loginForm.on('submit', async function(e) {
         e.preventDefault();
         const email = $('#email').val();
         const password = $('#password').val();
 
-        // تعطيل الزر وتغيير النص
         $submitButton.prop('disabled', true).text('جارٍ تسجيل الدخول...');
 
-        // تسجيل الدخول باستخدام Supabase
-        const { data, error } = await supabase.auth.signInWithPassword({
+        // الخطوة 1: تسجيل الدخول
+        const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
             email: email,
             password: password,
         });
 
-        if (error) {
-            // في حالة وجود خطأ
+        if (loginError) {
             showMessage('البريد الإلكتروني أو كلمة المرور غير صحيحة.', true);
-            $submitButton.prop('disabled', false).text('دخول'); // إعادة تفعيل الزر
-        } else if (data.user) {
-            // في حالة نجاح تسجيل الدخول
+            $submitButton.prop('disabled', false).text('دخول');
+            return;
+        }
+
+        if (loginData.user) {
+            // الخطوة 2: إذا نجح الدخول، جلب "الدور" من جدول profiles
+            const { data: profile, error: profileError } = await supabase
+                .from('profiles')
+                .select('role')
+                .eq('id', loginData.user.id)
+                .single(); // .single() لجلب سجل واحد فقط
+
+            if (profileError) {
+                showMessage('لم نتمكن من تحديد دورك. يرجى مراجعة الدعم.', true);
+                $submitButton.prop('disabled', false).text('دخول');
+                return;
+            }
+
             showMessage('تم تسجيل الدخول بنجاح! جارٍ توجيهك...');
-            // توجيه المستخدم إلى الصفحة الرئيسية بعد ثانية واحدة
+
+            // الخطوة 3: التوجيه بناءً على الدور
             setTimeout(() => {
-                window.location.href = 'home.html';
+                if (profile.role === 'admin') {
+                    // إذا كان أدمن، اذهب إلى لوحة التحكم
+                    window.location.href = 'admin/index.html';
+                } else {
+                    // إذا كان طالباً، اذهب إلى الملف الشخصي
+                    window.location.href = 'student/profil.html';
+                }
             }, 1000);
         }
     });
