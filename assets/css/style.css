@@ -1,0 +1,532 @@
+/************************************
+ * استيراد خط عربي (Tajawal)
+ ************************************/
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+
+/************************************
+ * تنسيقات أساسية وعامة
+ ************************************/
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #17a2b8;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #6c757d;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --bg-color: #f4f7f6;
+    --white: #ffffff;
+    --text-color: #333;
+    --border-color: #ddd;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --font-family: 'Tajawal', sans-serif;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+    line-height: 1.6;
+}
+
+body.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/************************************
+ * الهيدر وقائمة التنقل العلوية
+ ************************************/
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--white);
+    padding: 10px 40px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo a {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.main-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.main-nav li a {
+    padding: 15px;
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    display: block;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.main-nav li a:hover {
+    color: var(--primary-color);
+}
+
+.main-nav li a::after {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.main-nav li a:hover::after {
+    width: calc(100% - 30px);
+}
+
+/* تنسيقات قائمة الإشعارات المنسدلة */
+.notifications-menu {
+    position: relative;
+}
+
+.notification-count {
+    background: var(--danger-color);
+    color: var(--white);
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    position: absolute;
+    top: 10px;
+    right: 5px;
+}
+
+.notifications-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px var(--shadow-color);
+    min-width: 300px;
+    z-index: 1000;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notifications-menu:hover .notifications-dropdown {
+    display: block;
+}
+
+.notification-item {
+    display: block;
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+    text-decoration: none;
+    color: var(--text-color);
+    transition: background-color 0.3s ease;
+}
+
+.notification-item:hover {
+    background: var(--light-color);
+}
+
+.view-all {
+    text-align: center;
+    font-weight: bold;
+    padding: 10px;
+    border-bottom: none;
+    display: block;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.notifications-dropdown p {
+    padding: 10px;
+    text-align: center;
+    color: var(--info-color);
+}
+
+/************************************
+ * تنسيقات لوحة التحكم (Admin Dashboard)
+ ************************************/
+.admin-container {
+    display: flex;
+    min-height: calc(100vh - 72px); /* ارتفاع الهيدر الافتراضي */
+}
+
+.admin-sidebar {
+    width: 250px;
+    background-color: var(--white);
+    border-left: 1px solid var(--border-color);
+    padding: 20px;
+    box-shadow: 2px 0 10px var(--shadow-color);
+}
+
+.admin-sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.admin-sidebar li {
+    margin-bottom: 15px;
+}
+
+.admin-sidebar a {
+    display: block;
+    padding: 15px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.admin-sidebar a:hover, .admin-sidebar li.active a {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.admin-main-content {
+    flex: 1;
+    padding: 40px;
+}
+
+.admin-main-content h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+}
+
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.card {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px var(--shadow-color);
+    text-align: center;
+}
+
+.card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: var(--dark-color);
+}
+
+.stat-number {
+    font-size: 36px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.quick-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: var(--secondary-color);
+}
+
+/************************************
+ * تنسيقات صفحات الدخول والتسجيل
+ ************************************/
+.form-container {
+    background-color: var(--white);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px var(--shadow-color);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.form-container h2 {
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--info-color);
+}
+
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box; /* To ensure padding doesn't affect width */
+    font-family: var(--font-family);
+}
+
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: var(--secondary-color);
+}
+
+.switch-form {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.switch-form a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.switch-form a:hover {
+    text-decoration: underline;
+}
+
+.status-message {
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/************************************
+ * تنسيقات الدردشة
+ ************************************/
+.chat-container {
+    background: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px var(--shadow-color);
+    margin-top: 20px;
+    overflow: hidden;
+}
+
+.chat-box {
+    height: 500px;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+.chat-loading { text-align: center; color: var(--info-color); }
+
+.chat-message {
+    display: flex;
+    margin-bottom: 15px;
+    max-width: 75%;
+    align-items: flex-end;
+}
+
+.sender-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.message-bubble {
+    padding: 10px 15px;
+    border-radius: 18px;
+    max-width: 100%;
+}
+
+.message-sender {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.message-text {
+    line-height: 1.5;
+    word-wrap: break-word;
+    font-size: 15px;
+    white-space: pre-wrap;
+}
+
+.timestamp {
+    font-size: 12px;
+    display: block;
+    margin-top: 5px;
+    text-align: left;
+}
+
+/* Your own messages (sent) - align to the left */
+.chat-message[data-type="sent"] {
+    margin-right: auto;
+    flex-direction: row;
+}
+.chat-message[data-type="sent"] .sender-avatar { margin-left: 10px; }
+.chat-message[data-type="sent"] .message-bubble {
+    background-color: var(--primary-color);
+    color: white;
+    border-bottom-left-radius: 4px;
+}
+.chat-message[data-type="sent"] .message-sender { color: #e9ecef; }
+.chat-message[data-type="sent"] .timestamp { color: #e9ecef; opacity: 0.8; }
+
+/* Others' messages (received) - align to the right */
+.chat-message[data-type="received"] {
+    margin-left: auto;
+    flex-direction: row-reverse;
+}
+.chat-message[data-type="received"] .sender-avatar { margin-right: 10px; }
+.chat-message[data-type="received"] .message-bubble {
+    background-color: #e9ecef;
+    color: var(--text-color);
+    border-bottom-right-radius: 4px;
+}
+.chat-message[data-type="received"] .message-sender { color: var(--brand-darker, #0056b3); }
+.chat-message[data-type="received"] .timestamp { color: var(--text-secondary); }
+
+.chat-form {
+    display: flex;
+    border-top: 1px solid var(--border-color);
+    padding: 15px;
+    background-color: var(--white);
+    align-items: center;
+}
+
+#chat_message {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    margin-left: 10px;
+    font-family: var(--font-family);
+    font-size: 15px;
+}
+
+.chat-form button {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color 0.2s;
+}
+
+.chat-form button:hover {
+    background-color: var(--brand-darker, #0056b3);
+}
+
+/************************************
+ * Responsive Media Queries
+ ************************************/
+@media (max-width: 768px) {
+    .main-header {
+        flex-direction: column;
+        padding: 10px 20px;
+    }
+    .main-nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+    .main-nav li a {
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .profile-header {
+        padding: 20px;
+    }
+    .profile-picture {
+        width: 100px;
+        height: 100px;
+    }
+    .stats-cards {
+        grid-template-columns: 1fr;
+    }
+    .quick-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .form-container {
+        padding: 20px;
+    }
+    .btn-primary {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}
