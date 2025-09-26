@@ -7,8 +7,8 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 // اذهب إلى Settings > API
 // =================================================================
 
-const supabaseUrl = 'YOUR_SUPABASE_URL';         // الصق هنا Project URL
-const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';    // الصق هنا Project API Key (anon public)
+const supabaseUrl = 'https://fvekwrzefkpdoxmtitqo.supabase.co';         // الصق هنا Project URL
+const supabaseKey = 'sb_publishable_sVx5DmMUlx_aCSA2wOI4yQ_eTMORwVZ';    // الصق هنا Project API Key (anon public)
 
 // إنشاء وتصدير العميل (client) الخاص بـ Supabase
 const supabase = createClient(supabaseUrl, supabaseKey);
