@@ -1,0 +1,347 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+$unread_notifications_count = 0;
+$notifications = [];
+
+if (isset($_SESSION['user_id'])) {
+    require_once __DIR__ . '/../config/db_connexion.php';
+    
+    $stmt_count = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE user_id = ? AND is_read = 0");
+    $stmt_count->execute([$_SESSION['user_id']]);
+    $unread_notifications_count = $stmt_count->fetchColumn();
+
+    $stmt = $pdo->prepare(
+        "SELECT message, link, is_read, created_at FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 5"
+    );
+    $stmt->execute([$_SESSION['user_id']]);
+    $notifications = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+?>
+<style>
+    /* أنماط الهيدر الأساسية */
+    .main-header {
+        background: linear-gradient(135deg, #3cc412ff, #e48022ff);
+        color: white;
+        padding: 1rem 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* تصميم الشعار */
+    .logo a {
+        color: white;
+        text-decoration: none;
+        font-size: 1.8rem;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: transform 0.3s ease;
+    }
+
+    .logo a:hover {
+        transform: scale(1.05);
+    }
+
+    .logo a::before {
+        content: "📚";
+        font-size: 2rem;
+    }
+
+    /* القائمة الرئيسية */
+    .main-nav ul {
+        list-style: none;
+        display: flex;
+        gap: 1.5rem;
+        margin: 0;
+        padding: 0;
+        align-items: center;
+    }
+
+    .main-nav a {
+        color: white;
+        text-decoration: none;
+        padding: 0.5rem 0.8rem;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+    }
+
+    .main-nav a:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+    }
+
+    /* زر القائمة للموبايل */
+    .menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .menu-toggle:hover {
+        transform: rotate(90deg);
+    }
+
+    /* قائمة الإشعارات */
+    .notifications-menu {
+        position: relative;
+    }
+
+    .notification-count {
+        background: #e74c3c;
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 0.7rem;
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    .notifications-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: white;
+        color: #333;
+        min-width: 320px;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        margin-top: 10px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+
+    .notifications-menu:hover .notifications-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .dropdown-header {
+        background: #3498db;
+        color: white;
+        padding: 12px 15px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .dropdown-body {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .notification-item {
+        display: block;
+        padding: 12px 15px;
+        border-bottom: 1px solid #eee;
+        color: #333;
+        text-decoration: none;
+        transition: background 0.2s;
+    }
+
+    .notification-item:hover {
+        background: #f8f9fa;
+    }
+
+    .notification-item.unread {
+        background: #e3f2fd;
+        border-left: 4px solid #2196f3;
+    }
+
+    .notification-item p {
+        margin: 0 0 5px;
+        font-weight: 500;
+    }
+
+    .notification-item small {
+        color: #6666660a;
+        font-size: 0.8rem;
+    }
+
+    .no-notifications {
+        padding: 20px;
+        text-align: center;
+        color: #66666607;
+    }
+
+    .view-all {
+        display: block;
+        padding: 10px;
+        background: #f1f1f1;
+        color: #1c1e1fff;
+        text-align: center;
+        font-weight: bold;
+        text-decoration: none;
+        transition: background 0.2s;
+    }
+
+    .view-all:hover {
+        background: #e1e1e1;
+    }
+
+    /* تصميم للموبايل */
+    @media (max-width: 768px) {
+        .main-header {
+            padding: 1rem 3%;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .main-nav {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: #fcfdff15;
+            flex-direction: column;
+            padding: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-150%);
+            transition: transform 0.4s ease;
+        }
+
+        .main-nav.open {
+            transform: translateY(0);
+        }
+
+        .main-nav ul {
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .main-nav a {
+            padding: 0.8rem;
+            border-radius: 8px;
+            justify-content: center;
+        }
+
+        .menu-toggle {
+            display: block;
+        }
+
+        .notifications-dropdown {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 350px;
+        }
+    }
+</style>
+
+<header class="main-header">
+    <div class="logo">
+        <a href="/mo7adaraty/home.php">Mo7adaraty</a>
+    </div>
+
+    <div class="header-right">
+        <nav class="main-nav" id="mainNav">
+            <ul>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <?php if (!empty($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                        <li><a href="/mo7adaraty/admin/index.php"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
+                    <?php endif; ?>
+                    <li><a href="/mo7adaraty/student/profil.php"><i class="fas fa-user"></i> ملفي الشخصي</a></li>
+                    <li><a href="/mo7adaraty/student/community/index.php"><i class="fas fa-users"></i> ساحة المشاركات</a></li>
+                    <li><a href="/mo7adaraty/student/whatsapp_groups/index.php"><i class="fab fa-whatsapp"></i> مجموعات الواتساب</a></li>
+                    <li><a href="/mo7adaraty/student/contact/index.php"><i class="fas fa-envelope"></i> تواصل معنا</a></li>
+                    <li><a href="/mo7adaraty/student/announcements.php"><i class="fa-solid fa-bullhorn"></i> الإعلانات العامة</a></li>
+                    
+                    <li class="notifications-menu">
+                        <a href="/mo7adaraty/student/notifications.php" title="الإشعارات">
+                            <i class="fas fa-bell"></i>
+                            <?php if ($unread_notifications_count > 0): ?>
+                                <span class="notification-count"><?php echo $unread_notifications_count; ?></span>
+                            <?php endif; ?>
+                        </a>
+                        <div class="notifications-dropdown">
+                            <div class="dropdown-header">
+                                لديك <?php echo $unread_notifications_count; ?> إشعارات جديدة
+                            </div>
+                            <div class="dropdown-body">
+                                <?php if (!empty($notifications)): ?>
+                                    <?php foreach ($notifications as $n): ?>
+                                        <a class="notification-item <?php if(!$n['is_read']) echo 'unread'; ?>" 
+                                           href="<?php echo '/mo7adaraty/' . htmlspecialchars($n['link']); ?>">
+                                            <p><?php echo htmlspecialchars($n['message']); ?></p>
+                                            <small><?php echo date("d M, H:i", strtotime($n['created_at'])); ?></small>
+                                        </a>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <p class="no-notifications">لا توجد إشعارات لعرضها.</p>
+                                <?php endif; ?>
+                            </div>
+                            <a class="view-all" href="/mo7adaraty/student/notifications.php">عرض كل الإشعارات</a>
+                        </div>
+                    </li>
+                    
+                    <li><a href="/mo7adaraty/logout.php"><i class="fas fa-sign-out-alt"></i> خروج</a></li>
+                <?php else: ?>
+                    <li><a href="/mo7adaraty/login.php"><i class="fas fa-sign-in-alt"></i> دخول</a></li>
+                    <li><a href="/mo7adaraty/signup.php"><i class="fas fa-user-plus"></i> تسجيل</a></li>
+                <?php endif; ?>
+            </ul>
+        </nav>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</header>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.getElementById('menuToggle');
+    const nav = document.getElementById('mainNav');
+    
+    if(menuToggle && nav) {
+        menuToggle.addEventListener('click', function() {
+            nav.classList.toggle('open');
+        });
+    }
+    
+    // إغلاق القائمة عند النقر خارجها
+    document.addEventListener('click', function(event) {
+        const isClickInsideNav = nav.contains(event.target);
+        const isClickOnToggle = menuToggle.contains(event.target);
+        
+        if (!isClickInsideNav && !isClickOnToggle && nav.classList.contains('open')) {
+            nav.classList.remove('open');
+        }
+    });
+});
+</script>
