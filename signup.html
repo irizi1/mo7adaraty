@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب جديد - Mo7adaraty</title>
+    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* يمكنك وضع نفس تنسيقات CSS من ملف signup.php هنا */
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #e8ecef);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .form-container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+        .form-container h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            color: #1a73e8;
+            margin-bottom: 30px;
+        }
+        .status-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none; /* مخفي افتراضياً */
+        }
+        .error { background-color: #fdeded; color: #d93025; }
+        .success { background-color: #e6f7e9; color: #34c759; }
+        .enrollment-block {
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f5f7fa;
+        }
+        .track-group { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>إنشاء حساب جديد</h2>
+    <p id="status-message" class="status-message"></p>
+
+    <form id="signupForm" enctype="multipart/form-data">
+        <fieldset>
+            <legend>المعلومات الأساسية</legend>
+            <div class="form-group">
+                <label for="username">اسم المستخدم:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">البريد الإلكتروني:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">كلمة المرور:</label>
+                <input type="password" id="password" name="password" minlength="8" required>
+            </div>
+            <div class="form-group">
+                <label for="profile_picture">الصورة الشخصية (اختياري):</label>
+                <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>اختيار المقررات الدراسية (حتى 2)</legend>
+            <div class="form-group">
+                <label for="division">اختر الشعبة:</label>
+                <select id="division" name="division_id" required>
+                    <option value="" selected disabled>-- اختر الشعبة أولاً --</option>
+                </select>
+            </div>
+            
+            <div id="enrollment-container"></div>
+            
+            <button type="button" id="add-enrollment-btn" style="display:none;">+ إضافة مقرر آخر</button>
+        </fieldset>
+        
+        <button type="submit">إنشاء الحساب</button>
+    </form>
+    <div class="switch-form">
+        <p>لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a>.</p>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="module" src="assets/js/signup.js"></script>
+</body>
+</html>
