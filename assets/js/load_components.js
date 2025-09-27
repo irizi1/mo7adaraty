@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!container) return; 
 
         try {
-            // المسار هنا نسبي لملف load_components.js (يجب أن يكونا في نفس المجلد admin/js/)
+            // المسار النسبي: نبحث في مجلد components/ الذي هو بجوار مجلد js/
             const response = await fetch(`../components/${filePath}`); 
             const html = await response.text();
             container.innerHTML = html;
@@ -25,22 +25,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ------------------------------------------------------------------
-    // 2. دالة تفعيل رابط الشريط الجانبي
+    // 2. دالة تفعيل رابط الشريط الجانبي وإضافة منطق تسجيل الخروج
     // ------------------------------------------------------------------
     function activateSidebarLink(container) {
-        // نستخدم pathname لأنه يعمل بشكل أفضل مع GitHub Pages
         const currentPath = window.location.pathname; 
         const navItems = container.querySelectorAll('.nav-item');
         
         navItems.forEach(item => {
             const itemPath = item.querySelector('a').getAttribute('href'); 
             
-            // تحقق إذا كان مسار العنصر جزءًا من المسار الحالي في URL
+            // تحقق من أن العنصر هو جزء من المسار الحالي
             if (currentPath.includes(itemPath) && itemPath !== '/mo7adaraty/admin/index.html') {
                  item.classList.add('active');
             }
             
-            // حالة خاصة للصفحة الرئيسية (تطابق كامل أو تطابق مسار الجذر /admin/)
+            // حالة خاصة للصفحة الرئيسية
             if (itemPath === '/mo7adaraty/admin/index.html') {
                 if (currentPath.endsWith('/admin/index.html') || currentPath.endsWith('/admin/')) {
                     item.classList.add('active');
@@ -49,38 +48,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         // جلب اسم المستخدم وعرضه
-        // يجب أن نعتمد على Supabase هنا لجلب بيانات المستخدم
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session && session.user) {
-                // نفترض أن اسم المستخدم مخزن في metadata أو أننا سنجلبه لاحقاً
-                // نضع قيمة افتراضية مؤقتة
-                const usernameDisplay = document.getElementById('admin-username-display');
-                if (usernameDisplay) {
-                     usernameDisplay.textContent = session.user.email.split('@')[0] || 'المدير';
+        if (typeof supabase !== 'undefined') {
+             supabase.auth.getSession().then(({ data: { session } }) => {
+                if (session && session.user) {
+                    const usernameDisplay = document.getElementById('admin-username-display');
+                    if (usernameDisplay) {
+                        // استخدام البريد الإلكتروني كاسم مستخدم مؤقت
+                         usernameDisplay.textContent = session.user.email.split('@')[0] || 'المدير';
+                    }
                 }
-            }
-        });
+            });
+        }
 
-        // ------------------------------------------------------------------
-        // 3. منطق تسجيل الخروج
-        // ------------------------------------------------------------------
+
+        // منطق تسجيل الخروج
         const logoutBtn = document.getElementById('admin-logout-btn');
         if (logoutBtn) {
             logoutBtn.addEventListener('click', async (e) => {
                 e.preventDefault();
-                const { error } = await supabase.auth.signOut(); 
-                if (!error) {
-                    // التوجيه لصفحة تسجيل الدخول (يجب تعديل المسار ليتناسب مع موقع ملف login.html)
-                    window.location.href = '/mo7adaraty/login.html'; 
-                } else {
-                    console.error('Logout error:', error);
-                    alert('فشل في تسجيل الخروج.');
+                if (typeof supabase !== 'undefined') {
+                    const { error } = await supabase.auth.signOut(); 
+                    if (!error) {
+                        window.location.href = '/mo7adaraty/login.html'; 
+                    } else {
+                        console.error('Logout error:', error);
+                        alert('فشل في تسجيل الخروج.');
+                    }
                 }
             });
         }
     }
 
-    // 4. استدعاء التحميل (مع تحديد اسم الملف فقط هنا، والدالة تتولى إضافة المسار)
+    // 3. استدعاء التحميل (مسار الملف من مجلد components/)
     loadComponent(sidebarContainer, 'sidebar.html', true); 
     loadComponent(headerContainer, 'header.html');
 });
