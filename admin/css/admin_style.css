@@ -1,0 +1,250 @@
+/* admin_style.css - التنسيقات الأساسية للوحة التحكم */
+
+/* 1. إعادة تعيين التنسيقات (Reset) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif; /* استخدم خطًا يناسب اللغة العربية */
+}
+
+body {
+    background-color: #f4f7f6; /* خلفية فاتحة للوحة التحكم */
+    display: flex;
+    /* body سيكون الحاوية الرئيسية التي تضم sidebar-container و main-wrapper */
+}
+
+/* 2. تنسيق الشريط الجانبي (Sidebar) */
+#sidebar-container {
+    width: 250px;
+    height: 100vh;
+    position: fixed; /* يظل ثابتاً عند التمرير */
+    top: 0;
+    right: 0; /* ليتناسب مع اتجاه RTL */
+    background-color: #2c3e50; /* لون غامق جذاب */
+    color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+#sidebar .logo {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid #3c546a;
+}
+
+#sidebar .logo a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+#sidebar nav ul {
+    list-style: none;
+    padding: 20px 0;
+}
+
+#sidebar nav ul li a {
+    display: block;
+    padding: 15px 20px;
+    color: #ecf0f1;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+#sidebar nav ul li a i {
+    margin-left: 10px; /* مسافة بين الأيقونة والنص */
+}
+
+#sidebar nav ul li a:hover,
+#sidebar nav ul li a.active {
+    background-color: #1a242f;
+    border-right: 5px solid #3498db; /* شريط جانبي أزرق للعنصر النشط */
+    padding-right: 15px; /* لتعويض الشريط */
+}
+
+#sidebar .logout-section {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    padding: 0 20px;
+}
+
+#logout-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+#logout-btn:hover {
+    background-color: #c0392b;
+}
+
+/* 3. تنسيق المحتوى الرئيسي (Main Content) */
+#main-wrapper {
+    margin-right: 250px; /* ترك مساحة الشريط الجانبي */
+    width: calc(100% - 250px);
+    min-height: 100vh;
+    transition: margin-right 0.3s;
+}
+
+#main-content {
+    padding: 20px;
+}
+
+/* 4. تنسيق شريط الرأس (Header) */
+#header-container {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+#admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+}
+
+.current-page-title {
+    font-size: 1.5em;
+    font-weight: 500;
+    color: #333;
+    margin-right: 20px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.notifications {
+    position: relative;
+    margin-left: 20px;
+    cursor: pointer;
+    color: #555;
+}
+
+.notifications .badge {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.7em;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin-left: 10px;
+    object-fit: cover;
+    border: 2px solid #3498db;
+}
+
+/* 5. تنسيق الأزرار (Buttons) */
+.btn {
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 0.8em;
+    margin-left: 5px;
+}
+
+.btn-edit {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+    color: white;
+}
+
+/* 6. تنسيق الجداول (Data Table) */
+.lectures-table-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    margin-top: 20px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.data-table th, .data-table td {
+    padding: 12px 15px;
+    text-align: right;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.data-table th {
+    background-color: #ecf0f1;
+    color: #333;
+    font-weight: 600;
+}
+
+.data-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* 7. تنسيقات مساحة العمل (Workspace) */
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.header-actions {
+    margin-bottom: 20px;
+    text-align: left; /* دفع زر الإضافة إلى اليسار */
+}
+
+/* تنسيقات إضافية لصفحة إدارة المحاضرات */
+h2 {
+    color: #555;
+    font-size: 1.3em;
+    margin-bottom: 10px;
+}
+
+/* لتنسيق الأيقونات في الشريط الجانبي */
+/* يجب التأكد من أن الخط المناسب تم تضمينه في ملف sidebar.html أو في <head> */
