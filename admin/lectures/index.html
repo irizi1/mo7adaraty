@@ -4,26 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة المحاضرات - لوحة التحكم</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="../css/admin_style.css"> 
+    <link rel="icon" type="image/png" href="/mo7adaraty/assets/images/favicon.png">
+
+    <link rel="stylesheet" href="../../assets/css/admin_style.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .table-section table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .table-section th, .table-section td { padding: 12px 15px; text-align: right; border-bottom: 1px solid #ddd; }
+        .table-section th { background-color: #f8f9fa; font-weight: bold; }
+        .table-section tr:hover { background-color: #f1f1f1; }
+        .status-badge { padding: 5px 10px; border-radius: 4px; font-size: 14px; color: white; }
+        .status-published { background-color: #28a745; }
+        .status-pending { background-color: #ffc107; color: #333; }
+        .status-draft { background-color: #6c757d; }
+        .action-btn { padding: 6px 10px; margin-left: 5px; border: none; cursor: pointer; border-radius: 4px; color: white; }
+        .btn-edit { background-color: #007bff; }
+        .btn-delete { background-color: #dc3545; }
+        .add-button { background-color: #17a2b8; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 20px; display: inline-flex; align-items: center; font-size: 16px; }
+        .add-button i { margin-right: 10px; }
+    </style>
 </head>
 <body>
-    
-    <div id="sidebar-container"></div>
-    
-    <div id="main-wrapper">
-        <div id="header-container"></div>
+    <div class="admin-container">
+        <div id="sidebar-container"></div>
         
-        <div id="main-content">
-            <h1>إدارة المحاضرات</h1>
+        <main class="admin-main-content">
+            <div id="header-container"></div>
+
+            <h2>إدارة المحاضرات</h2>
             
-            <div class="header-actions">
-                <a href="add.html" class="btn btn-primary">➕ إضافة محاضرة جديدة</a>
-            </div>
-            
-            <div class="lectures-table-container">
-                <h2>قائمة المحاضرات الحالية</h2>
-                <table class="data-table">
+            <a href="edit.html" class="add-button"><i class="fa-solid fa-plus"></i> إضافة محاضرة جديدة</a>
+
+            <div class="table-section">
+                <h3>قائمة المحاضرات الحالية</h3>
+                
+                <p id="loading-message">جاري تحميل بيانات المحاضرات...</p>
+
+                <table id="lectures-table" style="display: none;">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -34,37 +51,17 @@
                             <th>إجراءات</th>
                         </tr>
                     </thead>
-                    <tbody id="lectures-list">
-                        <tr>
-                            <td>1</td>
-                            <td>مقدمة في الذكاء الاصطناعي</td>
-                            <td>تقنية</td>
-                            <td>2025-09-01</td>
-                            <td>منشورة</td>
-                            <td>
-                                <a href="edit.html?id=1" class="btn btn-sm btn-edit">تعديل</a>
-                                <button class="btn btn-sm btn-delete">حذف</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>أساسيات التصميم الجرافيكي</td>
-                            <td>تصميم</td>
-                            <td>2025-08-15</td>
-                            <td>مسودة</td>
-                            <td>
-                                <a href="edit.html?id=2" class="btn btn-sm btn-edit">تعديل</a>
-                                <button class="btn btn-sm btn-delete">حذف</button>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <tbody id="lectures-table-body">
+                        </tbody>
                 </table>
+                <p id="no-data-message" style="display: none;">لا توجد محاضرات لعرضها حالياً.</p>
             </div>
-        </div>
+        </main>
     </div>
-
-    <script src="../../js/supabase-client.js"></script>
-    <script src="../js/load_components.js"></script> 
-    <script src="../js/lectures.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../assets/js/supabase-client.js"></script> 
+    <script src="../js/load_components.js"></script>
+    <script src="js/lectures_list.js"></script>
 </body>
 </html>
