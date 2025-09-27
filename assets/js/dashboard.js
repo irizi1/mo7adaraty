@@ -1,70 +1,85 @@
 // mo7adaraty/admin/js/dashboard.js
+// هذا الملف مسؤول عن جلب بيانات لوحة القيادة من Supabase وعرضها
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // التحقق من صلاحية المسؤول (يجب أن يتم التحقق أولاً من تسجيل الدخول والأدمن)
-    // نفترض هنا أن هذا المنطق سيُضاف في ملف load_components.js أو supabase-client.js
-
-    const loadingMessage = (id) => document.getElementById(id).textContent = '...';
-    
     // ------------------------------------------------------------------
-    // 1. جلب إحصائيات المهام العاجلة والإحصاءات العامة
+    // دوال مساعدة لإنشاء وإظهار البيانات
+    // ------------------------------------------------------------------
+    const getElement = (id) => document.getElementById(id);
+    const updateStat = (id, count) => {
+        const element = getElement(id);
+        if (element) {
+            element.textContent = count !== null ? count.toLocaleString('ar-EG') : 'خطأ';
+        }
+    };
+    const showLoading = (id) => {
+        const element = getElement(id);
+        if (element) {
+            element.textContent = '...';
+        }
+    };
+
+    // ------------------------------------------------------------------
+    // 1. جلب الإحصائيات العامة والمهام العاجلة
     // ------------------------------------------------------------------
     async function fetchBasicStats() {
-        // [تنويه]: هذه الدوال تتطلب إنشاء View/Function في Supabase
-        // للجمع بين عمليات العد (COUNT) المتعددة لتقليل عدد طلبات API.
+        // نستخدم Promise.all لطلب جميع عمليات العد (COUNT) في وقت واحد لتحسين الأداء
         
-        // مثال لعملية عد بسيطة (لإجمالي الطلاب)
-        const { count: studentsCount, error: studentsError } = await supabase
-            .from('users')
-            .select('*', { count: 'exact', head: true })
-            .eq('role', 'student');
+        // المهام العاجلة (البيانات التي كانت تأتي من PHP)
+        const pendingLecturesPromise = supabase.from('lectures').select('*', { count: 'exact', head: true }).eq('status', 'pending');
+        const pendingEnrollmentRequestsPromise = supabase.from('enrollment_change_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending');
+        const pendingMessagesPromise = supabase.from('admin_messages').select('*', { count: 'exact', head: true }).eq('status', 'pending_reply');
+        const pendingPostsPromise = supabase.from('posts').select('*', { count: 'exact', head: true }).eq('status', 'pending');
+        const pendingReportsPromise = supabase.from('reports').select('*', { count: 'exact', head: true }).eq('status', 'pending');
 
-        if (!studentsError) {
-            document.getElementById('total_students_count').textContent = studentsCount;
-        } else {
-            console.error('Error fetching student count:', studentsError);
-            document.getElementById('total_students_count').textContent = 'خطأ';
-        }
-        
-        // مثال لعملية عد ثانية (لإجمالي المحاضرات المنشورة)
-        const { count: lecturesCount, error: lecturesError } = await supabase
-            .from('lectures')
-            .select('*', { count: 'exact', head: true })
-            .eq('status', 'published'); // تم تغيير 'approved' إلى 'published' ليتوافق مع المنطق السابق
+        // الإحصاءات العامة
+        const totalStudentsPromise = supabase.from('users').select('*', { count: 'exact', head: true }).eq('role', 'student');
+        const totalProfessorsPromise = supabase.from('professors').select('*', { count: 'exact', head: true });
+        // تم تغيير 'approved' إلى 'published' أو 'approved' بناءً على تصميم قاعدة بياناتك الفعلية. سنستخدم 'approved' بناءً على كود PHP.
+        const totalLecturesPromise = supabase.from('lectures').select('*', { count: 'exact', head: true }).eq('status', 'approved'); 
+        const totalExamsPromise = supabase.from('exams').select('*', { count: 'exact', head: true });
 
-        if (!lecturesError) {
-            document.getElementById('total_lectures_count').textContent = lecturesCount;
-        } else {
-            console.error('Error fetching lecture count:', lecturesError);
-            document.getElementById('total_lectures_count').textContent = 'خطأ';
-        }
+        const results = await Promise.all([
+            pendingLecturesPromise,
+            pendingEnrollmentRequestsPromise,
+            pendingMessagesPromise,
+            pendingPostsPromise,
+            pendingReportsPromise,
+            totalStudentsPromise,
+            totalProfessorsPromise,
+            totalLecturesPromise,
+            totalExamsPromise,
+        ]);
         
-        // ... يجب تكرار العملية لجميع العدادات الأخرى (pending_lectures, total_professors, إلخ)
-        // لتوفير الوقت، سنركز على الأهم، وسنفترض أن المنطق العام واضح.
+        // عرض النتائج
+        updateStat('pending_lectures_count', results[0].count);
+        updateStat('pending_enrollment_requests_count', results[1].count);
+        updateStat('pending_messages_count', results[2].count);
+        updateStat('pending_posts_count', results[3].count);
+        updateStat('pending_reports_count', results[4].count);
+        
+        updateStat('total_students_count', results[5].count);
+        updateStat('total_professors_count', results[6].count);
+        updateStat('total_lectures_count', results[7].count);
+        updateStat('total_exams_count', results[8].count);
     }
 
     // ------------------------------------------------------------------
-    // 2. جلب إحصاءات الشعبة وإنشاء الجدول (هذا هو الجزء الأصعب)
+    // 2. جلب إحصاءات الشعبة (يتطلب دالة قاعدة بيانات)
     // ------------------------------------------------------------------
     async function fetchDivisionStats() {
-        const tableContainer = document.getElementById('division-stats-table-container');
+        const tableContainer = getElement('division-stats-table-container');
         tableContainer.innerHTML = '<p>جاري تحميل إحصاءات الشعب...</p>';
 
-        // [تنويه]: هذا النوع من الاستعلامات المعقدة (JOINs و COUNTs المتعددة)
-        // لا يمكن تنفيذه مباشرة عبر الـ client side API في Supabase.
-        // الحل الصحيح هو: إنشاء "دالة قاعدة بيانات (PostgreSQL Function)" في Supabase
-        // تقوم بحساب كل هذه الإحصائيات (مثل الكود الذي أرسلته في PHP)
-        // ثم نستدعيها من JavaScript.
-        
-        // نفترض أنك أنشأت دالة في Supabase باسم 'get_division_dashboard_stats'
-        // وأنها ترجع مصفوفة من الكائنات (division_name, student_count, lecture_count, offering_count).
-        
         try {
+            // !! هام !!
+            // هذا الاستدعاء يتطلب منك إنشاء دالة (RPC) في Supabase بالاسم التالي.
+            // الدالة يجب أن تقوم بتنفيذ استعلامات JOIN و COUNT المعقدة التي كانت في ملف index.php الأصلي.
             const { data: divisionStats, error: statsError } = await supabase.rpc('get_division_dashboard_stats');
             
             if (statsError) {
-                console.error('Error calling function:', statsError);
-                tableContainer.innerHTML = '<p class="alert alert-error">فشل في جلب إحصاءات الشعب. (تحقق من دالة Supabase)</p>';
+                console.error('Supabase RPC Error:', statsError);
+                tableContainer.innerHTML = '<p class="alert alert-error">فشل في جلب إحصاءات الشعب. (تحقق من دالة Supabase: <code>get_division_dashboard_stats</code>)</p>';
                 return;
             }
 
@@ -107,7 +122,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // تشغيل جميع الدوال عند تحميل الصفحة
+    // تشغيل الدوال (بعد التأكد من تهيئة Supabase)
     fetchBasicStats();
     fetchDivisionStats();
 });
