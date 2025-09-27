@@ -4,68 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة المحاضرات - لوحة التحكم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="../css/admin_style.css"> 
 </head>
 <body>
-    <div id="sidebar">
-        <p>قائمة التنقل الجانبية (Sidebar)</p>
-        <ul>
-            <li><a href="../index.html">لوحة القيادة</a></li>
-            <li><a href="index.html">إدارة المحاضرات</a></li>
-            <li><a href="../users/index.html">إدارة المستخدمين</a></li>
-        </ul>
-    </div>
     
-    <div id="main-content">
-        <h1>إدارة المحاضرات</h1>
+    <div id="sidebar-container"></div>
+    
+    <div id="main-wrapper">
+        <div id="header-container"></div>
         
-        <div class="header-actions">
-            <a href="add.html" class="btn btn-primary">➕ إضافة محاضرة جديدة</a>
-        </div>
-        
-        <div class="lectures-table-container">
-            <h2>قائمة المحاضرات الحالية</h2>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>عنوان المحاضرة</th>
-                        <th>التصنيف</th>
-                        <th>تاريخ النشر</th>
-                        <th>الحالة</th>
-                        <th>إجراءات</th>
-                    </tr>
-                </thead>
-                <tbody id="lectures-list">
-                    <tr>
-                        <td>1</td>
-                        <td>مقدمة في الذكاء الاصطناعي</td>
-                        <td>تقنية</td>
-                        <td>2025-09-01</td>
-                        <td>منشورة</td>
-                        <td>
-                            <a href="edit.html?id=1" class="btn btn-sm btn-edit">تعديل</a>
-                            <button class="btn btn-sm btn-delete">حذف</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>أساسيات التصميم الجرافيكي</td>
-                        <td>تصميم</td>
-                        <td>2025-08-15</td>
-                        <td>مسودة</td>
-                        <td>
-                            <a href="edit.html?id=2" class="btn btn-sm btn-edit">تعديل</a>
-                            <button class="btn btn-sm btn-delete">حذف</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div id="main-content">
+            <h1>إدارة المحاضرات</h1>
             
+            <div class="header-actions">
+                <a href="add.html" class="btn btn-primary">➕ إضافة محاضرة جديدة</a>
             </div>
+            
+            <div class="lectures-table-container">
+                <h2>قائمة المحاضرات الحالية</h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>عنوان المحاضرة</th>
+                            <th>التصنيف</th>
+                            <th>تاريخ النشر</th>
+                            <th>الحالة</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lectures-list">
+                        <tr>
+                            <td>1</td>
+                            <td>مقدمة في الذكاء الاصطناعي</td>
+                            <td>تقنية</td>
+                            <td>2025-09-01</td>
+                            <td>منشورة</td>
+                            <td>
+                                <a href="edit.html?id=1" class="btn btn-sm btn-edit">تعديل</a>
+                                <button class="btn btn-sm btn-delete">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>أساسيات التصميم الجرافيكي</td>
+                            <td>تصميم</td>
+                            <td>2025-08-15</td>
+                            <td>مسودة</td>
+                            <td>
+                                <a href="edit.html?id=2" class="btn btn-sm btn-edit">تعديل</a>
+                                <button class="btn btn-sm btn-delete">حذف</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script src="../../js/supabase-client.js"></script>
+    <script src="../js/load_components.js"></script> 
     <script src="../js/lectures.js"></script>
 </body>
 </html>
