@@ -304,5 +304,25 @@ h2 {
 .btn-secondary:hover {
     background-color: #7f8c8d;
 }
+/* 9. تنسيق رسائل التنبيه (Alerts) */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
 /* لتنسيق الأيقونات في الشريط الجانبي */
 /* يجب التأكد من أن الخط المناسب تم تضمينه في ملف sidebar.html أو في <head> */
