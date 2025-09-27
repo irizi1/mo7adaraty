@@ -2,16 +2,14 @@
 import supabase from './supabase.js';
 
 $(document).ready(function() {
-    // --- متغيرات وعناصر أساسية ---
+    // --- عناصر أساسية ---
     const $statusMessage = $('#status-message');
     const $divisionSelect = $('#division');
     const $enrollmentContainer = $('#enrollment-container');
     const $addEnrollmentBtn = $('#add-enrollment-btn');
     const $signupForm = $('#signupForm');
     const $submitButton = $signupForm.find('button[type="submit"]');
-
-    let enrollmentCounter = 0;
-    const ADVANCED_CLASSES_IDS = [5, 6]; // احتفظ بهذه المعرفات كما هي
+    const ADVANCED_CLASSES_IDS = [5, 6];
 
     // --- دوال مساعدة ---
     function showMessage(message, isError = false) {
@@ -20,11 +18,8 @@ $(document).ready(function() {
 
     // --- تحميل البيانات الأولية ---
     async function loadDivisions() {
-        const { data: divisions, error } = await supabase.from('divisions').select('*');
-        if (error) {
-            console.error('Error fetching divisions:', error);
-            return;
-        }
+        const { data, error } = await supabase.from('divisions').select('*').order('division_name');
+        if (error) return console.error('Error fetching divisions:', error);
         divisions.forEach(div => {
             $divisionSelect.append(`<option value="${div.division_id}">${div.division_name}</option>`);
         });
@@ -32,8 +27,6 @@ $(document).ready(function() {
     loadDivisions();
 
     // --- منطق النموذج الديناميكي ---
-    
-    // عند تغيير الشعبة
     $divisionSelect.on('change', function() {
         $enrollmentContainer.empty();
         enrollmentCounter = 0;
@@ -45,7 +38,6 @@ $(document).ready(function() {
         }
     });
 
-    // زر إضافة مقرر آخر
     $addEnrollmentBtn.on('click', addEnrollmentBlock);
 
     function addEnrollmentBlock() {
@@ -76,25 +68,65 @@ $(document).ready(function() {
         const divisionID = $divisionSelect.val();
         const $classSelect = $(`#enrollment-block-${counter} .class-select`);
         
-        // ملاحظة: هذا الاستعلام يفترض أنك أنشأت علاقة بين الجداول في Supabase
-        const { data: classes, error } = await supabase.rpc('get_classes_by_division', { p_division_id: divisionID });
+        const { data, error } = await supabase.rpc('get_classes_by_division', { p_division_id: divisionID });
 
-        if (error) console.error('Error fetching classes:', error);
-        if (classes) {
-            classes.forEach(cls => {
-                $classSelect.append(`<option value="${cls.class_id}">${cls.class_name}</option>`);
-            });
-        }
+        if (error) return console.error('Error fetching classes:', error);
+        $classSelect.html('<option value="">-- اختر الفصل --</option>');
+        data.forEach(cls => {
+            $classSelect.append(`<option value="${cls.class_id}">${cls.class_name}</option>`);
+        });
     }
 
-    // عند تغيير الفصل أو المسار (يجب إكمال هذا المنطق بنفس طريقة PHP)
-    $enrollmentContainer.on('change', '.class-select, .track-select', async function() {
-        // ... سيتم هنا جلب الأفواج بناءً على الفصل والمسار المختار ...
+    // --- Event listener for changing class ---
+    $enrollmentContainer.on('change', '.class-select', async function() {
+        const $block = $(this).closest('.enrollment-block');
+        const classID = parseInt($(this).val());
+        const $trackGroup = $block.find('.track-group');
+        const $trackSelect = $block.find('.track-select');
+        const $groupSelect = $block.find('.group-select');
+
+        $trackGroup.hide();
+        $trackSelect.html('<option value="">-- اختر المسار --</option>').prop('required', false);
+        $groupSelect.html('<option value="">-- اختر --</option>');
+
+        if (ADVANCED_CLASSES_IDS.includes(classID)) {
+            $trackGroup.show();
+            $trackSelect.prop('required', true);
+            const divisionID = $divisionSelect.val();
+            const { data, error } = await supabase.rpc('get_tracks_by_division', { p_division_id: divisionID });
+            if (error) return console.error('Error fetching tracks:', error);
+            data.forEach(track => {
+                $trackSelect.append(`<option value="${track.track_id}">${track.track_name}</option>`);
+            });
+        } else {
+            const { data, error } = await supabase.rpc('get_groups_by_class', { p_class_id: classID });
+            if (error) return console.error('Error fetching groups:', error);
+            data.forEach(group => {
+                $groupSelect.append(`<option value="${group.offering_id}">${group.group_name}</option>`);
+            });
+        }
     });
 
+    // --- Event listener for changing track ---
+    $enrollmentContainer.on('change', '.track-select', async function() {
+        const $block = $(this).closest('.enrollment-block');
+        const classID = $block.find('.class-select').val();
+        const trackID = $(this).val();
+        const $groupSelect = $block.find('.group-select');
 
-    // --- التعامل مع إرسال النموذج ---
+        $groupSelect.html('<option value="">-- اختر --</option>');
+        if (trackID) {
+            const { data, error } = await supabase.rpc('get_groups_by_class_and_track', { p_class_id: classID, p_track_id: trackID });
+            if (error) return console.error('Error fetching groups by track:', error);
+            data.forEach(group => {
+                $groupSelect.append(`<option value="${group.offering_id}">${group.group_name}</option>`);
+            });
+        }
+    });
+
+    // --- Form Submission Logic ---
     $signupForm.on('submit', async function(e) {
+        // ... (نفس كود إرسال النموذج الذي أرسلته سابقاً) ...
         e.preventDefault();
         $submitButton.prop('disabled', true).text('جارٍ إنشاء الحساب...');
 
@@ -104,7 +136,6 @@ $(document).ready(function() {
         const profilePictureFile = $('#profile_picture')[0].files[0];
         const offeringIds = $('select[name="offering_id[]"]').map((_, el) => $(el).val()).get();
 
-        // 1. إنشاء حساب المستخدم
         const { data: authData, error: authError } = await supabase.auth.signUp({
             email: email,
             password: password,
@@ -120,9 +151,8 @@ $(document).ready(function() {
         const user = authData.user;
         let profilePictureUrl = null;
 
-        // 2. رفع الصورة الشخصية (إذا وجدت)
         if (profilePictureFile) {
-            const filePath = `public/${user.id}/${profilePictureFile.name}`;
+            const filePath = `public/${user.id}/${Date.now()}_${profilePictureFile.name}`;
             const { error: uploadError } = await supabase.storage.from('profile_pictures').upload(filePath, profilePictureFile);
             if (!uploadError) {
                 const { data } = supabase.storage.from('profile_pictures').getPublicUrl(filePath);
@@ -130,16 +160,11 @@ $(document).ready(function() {
             }
         }
         
-        // 3. تحديث بيانات المستخدم بالصورة واسم المستخدم (في جدول profiles)
         const { error: profileError } = await supabase
-            .from('profiles') // أنت بحاجة لإنشاء هذا الجدول
-            .update({
-                username: username,
-                profile_picture_url: profilePictureUrl
-            })
+            .from('profiles')
+            .update({ username: username, profile_picture: profilePictureUrl })
             .eq('id', user.id);
 
-        // 4. إضافة تسجيلات الطالب
         const enrollments = offeringIds.map(id => ({ user_id: user.id, offering_id: id }));
         const { error: enrollmentError } = await supabase.from('student_enrollments').insert(enrollments);
 
