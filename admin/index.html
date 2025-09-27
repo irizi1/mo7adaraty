@@ -3,68 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة المحاضرات - لوحة التحكم</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="/assets/css/admin_style.css"> 
+    <title>لوحة التحكم - Mo7adaraty</title>
+    <link rel="icon" type="image/png" href="/mo7adaraty/assets/images/favicon.png">
+
+    <link rel="stylesheet" href="../css/admin_style.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .card a { text-decoration: none; color: inherit; display: block; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .card { transition: all 0.3s ease; }
+        h3 { font-size: 20px; color: #343a40; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #e9ecef;}
+    </style>
 </head>
 <body>
-    
-    <div id="sidebar-container"></div>
-    
-    <div id="main-wrapper">
-        <div id="header-container"></div>
+    <div class="admin-container">
+        <div id="sidebar-container"></div>
         
-        <div id="main-content">
-            <h1>إدارة المحاضرات</h1>
-            
-            <div class="header-actions">
-                <a href="add.html" class="btn btn-primary">➕ إضافة محاضرة جديدة</a>
-            </div>
-            
-            <div class="lectures-table-container">
-                <h2>قائمة المحاضرات الحالية</h2>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>عنوان المحاضرة</th>
-                            <th>التصنيف</th>
-                            <th>تاريخ النشر</th>
-                            <th>الحالة</th>
-                            <th>إجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lectures-list">
-                        <tr>
-                            <td>1</td>
-                            <td>مقدمة في الذكاء الاصطناعي</td>
-                            <td>تقنية</td>
-                            <td>2025-09-01</td>
-                            <td>منشورة</td>
-                            <td>
-                                <a href="edit.html?id=1" class="btn btn-sm btn-edit">تعديل</a>
-                                <button class="btn btn-sm btn-delete">حذف</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>أساسيات التصميم الجرافيكي</td>
-                            <td>تصميم</td>
-                            <td>2025-08-15</td>
-                            <td>مسودة</td>
-                            <td>
-                                <a href="edit.html?id=2" class="btn btn-sm btn-edit">تعديل</a>
-                                <button class="btn btn-sm btn-delete">حذف</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+        <main class="admin-main-content">
+            <div id="header-container"></div>
 
-    <script src="../../js/supabase-client.js"></script>
-    <script src="../js/load_components.js"></script> 
-    <script src="../js/lectures.js"></script>
+            <h2><i class="fa-solid fa-chart-line"></i> لوحة التحكم الرئيسية</h2>
+            
+            <h3><i class="fa-solid fa-circle-exclamation"></i> المهام العاجلة</h3>
+            <div class="stats-cards" id="urgent-tasks-cards">
+                <div class="card" style="border-left-color: #f59e0b;"><a href="lectures/index.html?status=pending"><h3><i class="fa-solid fa-hourglass-half"></i> محاضرات للمراجعة</h3><p class="stat-number" id="pending_lectures_count">...</p></a></div>
+                <div class="card" style="border-left-color: #ef4444;"><a href="post_reviews/index.html"><h3><i class="fa-solid fa-check-to-slot"></i> مشاركات للمراجعة</h3><p class="stat-number" id="pending_posts_count">...</p></a></div>
+                <div class="card" style="border-left-color: #3b82f6;"><a href="enrollment_requests/index.html"><h3><i class="fa-solid fa-exchange-alt"></i> طلبات تغيير المقرر</h3><p class="stat-number" id="pending_enrollment_requests_count">...</p></a></div>
+                <div class="card" style="border-left-color: #10b981;"><a href="messages/index.html"><h3><i class="fa-solid fa-inbox"></i> الرسائل الجديدة</h3><p class="stat-number" id="pending_messages_count">...</p></a></div>
+                <div class="card" style="border-left-color: #6366f1;"><a href="reports/index.html"><h3><i class="fa-solid fa-flag"></i> البلاغات الجديدة</h3><p class="stat-number" id="pending_reports_count">...</p></a></div>
+            </div>
+
+            <h3><i class="fa-solid fa-globe"></i> إحصاءات عامة</h3>
+            <div class="stats-cards" id="general-stats-cards">
+                <div class="card" style="border-left-color: #14b8a6;"><a href="users/index.html"><h3><i class="fa-solid fa-users"></i> إجمالي الطلاب</h3><p class="stat-number" id="total_students_count">...</p></a></div>
+                <div class="card" style="border-left-color: #8b5cf6;"><a href="professors/index.html"><h3><i class="fa-solid fa-user-tie"></i> إجمالي الأساتذة</h3><p class="stat-number" id="total_professors_count">...</p></a></div>
+                <div class="card" style="border-left-color: #d946ef;"><a href="lectures/index.html"><h3><i class="fa-solid fa-book-open"></i> المحاضرات المنشورة</h3><p class="stat-number" id="total_lectures_count">...</p></a></div>
+                <div class="card" style="border-left-color: #f97316;"><a href="exams/index.html"><h3><i class="fa-solid fa-file-signature"></i> الامتحانات المرفوعة</h3><p class="stat-number" id="total_exams_count">...</p></a></div>
+            </div>
+
+            <h3><i class="fa-solid fa-sitemap"></i> إحصاءات حسب الشعبة</h3>
+            <div class="table-section">
+                <div id="division-stats-table-container">
+                    <p id="division-loading-message">جاري تحميل إحصاءات الشعب...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="../../js/supabase-client.js"></script> 
+    <script src="js/load_components.js"></script>
+    <script src="js/dashboard.js"></script>
 </body>
 </html>
