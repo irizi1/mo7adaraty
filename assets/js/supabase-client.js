@@ -13,7 +13,7 @@ const SUPABASE_ANON_KEY = 'sb_publishable_sVx5DmMUlx_aCSA2wOI4yQ_eTMORwVZ'; // �
 // !! هام جداً: يجب استبدال هذه القيم بالمعلومات الخاصة بمشروعك !!
 // 2. تهيئة عميل Supabase
 // يتم استخدام window.supabase (الذي يتم تحميله عبر CDN)
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); 
 
 // 3. دالة التحقق من صلاحية الأدمن
 // هذه الدالة ضرورية لحماية صفحة الأدمن بالكامل
