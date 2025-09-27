@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة محاضرة جديدة - لوحة التحكم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../css/admin_style.css">
+</head>
+<body>
+    
+    <div id="sidebar-container"></div>
+    
+    <div id="main-wrapper">
+        <div id="header-container"></div>
+        
+        <div id="main-content">
+            <h1>إضافة محاضرة جديدة</h1>
+            
+            <div class="card form-container">
+                <form id="add-lecture-form">
+                    
+                    <div class="form-group">
+                        <label for="title">عنوان المحاضرة</label>
+                        <input type="text" id="title" name="title" required placeholder="مثال: مقدمة في برمجة Flutter">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">التصنيف</label>
+                        <select id="category" name="category" required>
+                            <option value="" disabled selected>اختر تصنيفاً</option>
+                            <option value="تقنية">تقنية</option>
+                            <option value="تصميم">تصميم</option>
+                            <option value="تسويق">تسويق</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">وصف المحاضرة</label>
+                        <textarea id="description" name="description" rows="5" required placeholder="وصف موجز ومقنع للمحاضرة ومحتواها..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="url">رابط المحاضرة (URL)</label>
+                        <input type="url" id="url" name="url" required placeholder="مثال: https://www.youtube.com/watch?v=xxxxxxxx">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">حالة النشر</label>
+                        <select id="status" name="status" required>
+                            <option value="draft">مسودة</option>
+                            <option value="published">منشورة</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">حفظ ونشر المحاضرة</button>
+                        <a href="index.html" class="btn btn-secondary">إلغاء والعودة</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/supabase-client.js"></script>
+    <script src="../js/load_components.js"></script> 
+    <script src="../js/add_lecture.js"></script> 
+</body>
+</html>
