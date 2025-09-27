@@ -4,42 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة التحكم - Mo7adaraty</title>
+    <link rel="icon" type="image/png" href="../assets/images/favicon.png">
     <link rel="stylesheet" href="../assets/css/admin_style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .card a { text-decoration: none; color: inherit; display: block; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .card { transition: all 0.3s ease; }
+        h3 { font-size: 20px; color: #343a40; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #e9ecef;}
+    </style>
 </head>
 <body>
+    <div id="header-placeholder"></div>
+
     <div class="admin-container">
-        <aside class="admin-sidebar">
-            </aside>
+        <div id="sidebar-placeholder"></div>
+
         <main class="admin-main-content">
             <h2><i class="fa-solid fa-chart-line"></i> لوحة التحكم الرئيسية</h2>
-            <p>أهلاً بك في لوحة التحكم. سيتم عرض الإحصائيات هنا.</p>
             
-            <div id="user-info"></div>
+            <h3><i class="fa-solid fa-circle-exclamation"></i> المهام العاجلة</h3>
+            <div class="stats-cards">
+                <div class="card" style="border-left-color: #f59e0b;"><a href="reviews/index.html"><h3><i class="fa-solid fa-hourglass-half"></i> محاضرات للمراجعة</h3><p id="pending-lectures" class="stat-number">0</p></a></div>
+                <div class="card" style="border-left-color: #ef4444;"><a href="post_reviews/index.html"><h3><i class="fa-solid fa-check-to-slot"></i> مشاركات للمراجعة</h3><p id="pending-posts" class="stat-number">0</p></a></div>
+                <div class="card" style="border-left-color: #3b82f6;"><a href="enrollment_requests/index.html"><h3><i class="fa-solid fa-exchange-alt"></i> طلبات تغيير المقرر</h3><p id="pending-enrollments" class="stat-number">0</p></a></div>
+                <div class="card" style="border-left-color: #10b981;"><a href="messages/index.html"><h3><i class="fa-solid fa-inbox"></i> الرسائل الجديدة</h3><p id="pending-messages" class="stat-number">0</p></a></div>
+                <div class="card" style="border-left-color: #6366f1;"><a href="reports/index.html"><h3><i class="fa-solid fa-flag"></i> البلاغات الجديدة</h3><p id="pending-reports" class="stat-number">0</p></a></div>
+            </div>
+
+            <h3><i class="fa-solid fa-globe"></i> إحصاءات عامة</h3>
+            <div class="stats-cards">
+                <div class="card" style="border-left-color: #14b8a6;"><a href="users/index.html"><h3><i class="fa-solid fa-users"></i> إجمالي الطلاب</h3><p id="total-students" class="stat-number">0</p></a></div>
+                <div class="card" style="border-left-color: #8b5cf6;"><a href="professors/index.html"><h3><i class="fa-solid fa-user-tie"></i> إجمالي الأساتذة</h3><p id="total-professors" class="stat-number">0</p></a></div>
+                <div class="card" style="border-left-color: #d946ef;"><a href="lectures/index.html"><h3><i class="fa-solid fa-book-open"></i> المحاضرات المنشورة</h3><p id="total-lectures" class="stat-number">0</p></a></div>
+                <div class="card" style="border-left-color: #f97316;"><a href="exams/index.html"><h3><i class="fa-solid fa-file-signature"></i> الامتحانات المرفوعة</h3><p id="total-exams" class="stat-number">0</p></a></div>
+            </div>
         </main>
     </div>
 
-    <script type="module">
-        import supabase from '../assets/js/supabase.js';
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            // التحقق من وجود مستخدم مسجل دخوله
-            const { data: { session }, error } = await supabase.auth.getSession();
-
-            if (!session) {
-                // إذا لم يكن هناك مستخدم، قم بتوجيهه لصفحة الدخول
-                window.location.href = '../login.html';
-                return;
-            }
-
-            // عرض معلومات المستخدم للتأكد
-            const userInfoDiv = document.getElementById('user-info');
-            userInfoDiv.innerHTML = `
-                <h3>معلومات المستخدم الحالي:</h3>
-                <p><strong>البريد الإلكتروني:</strong> ${session.user.email}</p>
-                <p><strong>معرف المستخدم:</strong> ${session.user.id}</p>
-            `;
-        });
-    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="module" src="assets/js/dashboard.js"></script>
 </body>
 </html>
