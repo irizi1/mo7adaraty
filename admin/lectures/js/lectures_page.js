@@ -1,20 +1,5 @@
 // mo7adaraty/admin/lectures/js/lectures_page.js
 
-document.addEventListener('DOMContentLoaded', () => {
-    // التحقق من صلاحية الأدمن (يفترض وجود دالة checkAdminAuth في supabase-client.js)
-    if (typeof checkAdminAuth === 'function') {
-        checkAdminAuth().then(isAdmin => {
-            if (isAdmin) {
-                initializePage();
-            } else {
-                // إذا لم يكن مسؤولاً، سيتم التوجيه من داخل checkAdminAuth
-            }
-        });
-    } else {
-        console.warn("checkAdminAuth function not found. Proceeding without explicit admin check.");
-        initializePage();
-    }
-});
 
 function initializePage() {
     const divisionSelect = document.getElementById('division');
